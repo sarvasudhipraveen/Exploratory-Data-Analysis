@@ -1,0 +1,61 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+df = sns.load_dataset("iris")
+
+print(df.head())
+
+print("\nDataset Info:")
+print(df.info())
+
+print("\nStatistical Summary:")
+print(df.describe())
+
+print("\nMissing Values:")
+print(df.isnull().sum())
+
+df.hist(figsize=(10,8))
+plt.suptitle("Histogram of Numerical Features")
+plt.show()
+
+plt.figure(figsize=(10,6))
+
+for i, column in enumerate(df.select_dtypes(include=np.number).columns):
+    plt.subplot(2,2,i+1)
+    sns.boxplot(y=df[column])
+    plt.title(f"Boxplot of {column}")
+
+plt.tight_layout()
+plt.show()
+
+sns.scatterplot(data=df, x='sepal_length', y='petal_length', hue='species')
+plt.title("Sepal Length vs Petal Length")
+plt.show()
+
+sns.barplot(data=df, x='species', y='sepal_length')
+plt.title("Average Sepal Length by Species")
+plt.show()
+numeric_df = df.select_dtypes(include=np.number)
+
+correlation = numeric_df.corr()
+
+plt.figure(figsize=(8,6))
+sns.heatmap(correlation, annot=True, cmap='coolwarm')
+plt.title("Correlation Heatmap")
+plt.show()
+
+sns.pairplot(df, hue='species')
+plt.show()
+
+plt.figure(figsize=(8,6))
+sns.boxplot(data=df.select_dtypes(include=np.number))
+plt.title("Outlier Detection")
+plt.show()
+
+print("Key Insights:")
+print("1. Petal length and petal width are highly correlated.")
+print("2. Some species are clearly separable based on petal measurements.")
+print("3. Boxplots help identify outliers.")
+print("4. Heatmap shows strong positive relationships among some variables.")
